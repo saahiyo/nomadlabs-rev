@@ -1,0 +1,355 @@
+/**
+ * Home Grid - Nomad Labs
+ *
+ * 4 vertical columns with scroll-driven infinite loop.
+ * Columns 1 & 3: content enters from top (scroll down).
+ * Columns 2 & 4: content enters from bottom (scroll up).
+ *
+ * @package NomadLabs
+ */
+
+/* ============================================
+   SECTION — fullscreen, no native scroll needed
+   ============================================ */
+
+   .home-grid {
+    position: relative;
+    height: 100vh;
+    background: transparent;
+}
+
+/* ============================================
+   CENTERED LOGO
+   ============================================ */
+
+.home-grid__logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: var(--z-overlay, 50);
+    pointer-events: none;
+    will-change: opacity;
+}
+
+.home-grid__logo img,
+.home-grid__logo svg {
+    display: block;
+    width: 80vw;
+    height: auto;
+    max-width: 80vw;
+}
+
+/* Tuerca del logo — rota siguiendo el cursor como aguja de brújula.
+   transform-box:fill-box + transform-origin:center hace que el rotate
+   use el centro geométrico del propio grupo, no del viewBox global.
+   Sin transición CSS aquí: el lerp del JS (logo-spin.js) suaviza todo. */
+#nl-asterisk {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+/* ============================================
+   LIST BUTTON — bottom center
+   ============================================ */
+
+.home-grid__list-btn {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--z-header, 100);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -.015em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.home-grid__list-btn svg {
+    flex-shrink: 0;
+}
+
+/* Hover gating estricto (patrón canadacanada): sólo en dispositivos con
+   puntero preciso (mouse). En móvil/táctil el :hover queda "sticky" tras
+   tap y genera UX sucia. `pointer: fine` filtra esos casos. */
+@media (hover: hover) and (pointer: fine) {
+    .home-grid__list-btn:hover {
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   VIEWPORT — fills section
+   ============================================ */
+
+.home-grid__sticky {
+    height: 100%;
+}
+
+/* ============================================
+   COLUMNS LAYOUT
+   ============================================ */
+
+.home-grid__columns {
+    display: flex;
+    gap: 16px;
+    height: 100%;
+    padding: 0 var(--grid-padding);
+    overflow: hidden;
+    contain: strict;
+}
+
+.home-grid__col {
+    flex: 1;
+    min-width: 0;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    visibility: hidden;
+}
+
+/* ============================================
+   TRACK — vertical flex, JS clones for loop
+   ============================================ */
+
+.home-grid__track {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid-gap);
+}
+
+/* ============================================
+   GRID ITEMS
+   ============================================ */
+
+/* La columna es el container-query context. Cambia de ancho según viewport
+   (4/3/2/1 columnas) → cqw refleja el tamaño real del tile. */
+.home-grid__col {
+    container-type: inline-size;
+}
+
+.grid-item {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    /* Radius escalado al ancho del tile (patrón canadacanada):
+       4px mínimo, 2.5cqw de la columna, 14px máximo. Un tile grande
+       tiene esquinas más redondeadas que uno pequeño — visualmente
+       correcto en cualquier densidad del grid. */
+    border-radius: clamp(4px, 2.5cqw, 14px);
+    cursor: pointer;
+    contain: layout style paint;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* ============================================
+   ITEM SIZES — aspect-ratio controls height
+   ============================================ */
+
+.grid-item--tall {
+    aspect-ratio: 3 / 5;
+}
+
+.grid-item--medium {
+    aspect-ratio: 3 / 4;
+}
+
+.grid-item--short {
+    aspect-ratio: 4 / 3;
+}
+
+.grid-item--wide {
+    aspect-ratio: 16 / 10;
+}
+
+.grid-item--square {
+    aspect-ratio: 1 / 1;
+}
+
+.grid-item--xtall {
+    aspect-ratio: 2 / 5;
+}
+
+/* ============================================
+   MEDIA
+   ============================================ */
+
+.grid-item__media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+    contain: strict;
+}
+
+.grid-item__img,
+.grid-item__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* ============================================
+   ARROW — top right, always visible
+   ============================================ */
+
+.grid-item__arrow {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 4;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    pointer-events: none;
+}
+
+/* ============================================
+   TITLE LABEL — bottom left, always visible
+   ============================================ */
+
+.grid-item__label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 4;
+    padding: 6px 12px;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    pointer-events: none;
+    max-width: calc(100% - 20px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================
+   VIDEO ITEMS
+   ============================================ */
+
+.grid-item__poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+    transition: opacity 0.5s var(--ease-out);
+}
+
+.grid-item--video.is-playing .grid-item__poster {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Crossfade simétrico (patrón canadacanada): video arranca en opacity 0
+   y hace fade-in 500ms al confirmar playback. Duración sincronizada con
+   el fade-out del poster → ambos cruzan en t≈250ms, sin pop visual. */
+.grid-item__video {
+    transition: opacity 0.5s var(--ease-out);
+}
+.grid-item--video[data-video-behavior="hover"] .grid-item__video {
+    opacity: 0;
+}
+.grid-item--video.is-playing .grid-item__video {
+    opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    /* Hide 4th column */
+    .home-grid__col:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 809px) {
+    .home-grid__columns {
+        gap: 8px;
+    }
+
+    /* Aspect-ratio responsivo (patrón canadacanada): en pantallas estrechas
+       suavizamos las proporciones extremas para que las cards no queden
+       kilométricas verticalmente. */
+    .grid-item--xtall { aspect-ratio: 3 / 5; }
+    .grid-item--wide  { aspect-ratio: 4 / 3; }
+
+    .grid-item__label {
+        font-size: 10px;
+        padding: 4px 8px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background-color: rgba(245, 245, 245, 0.85);
+    }
+
+    .grid-item__arrow {
+        width: 20px;
+        height: 20px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background-color: rgba(245, 245, 245, 0.85);
+    }
+
+    .grid-item__arrow svg {
+        width: 10px;
+        height: 10px;
+    }
+
+    .home-grid__list-btn {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background-color: rgba(245, 245, 245, 0.85);
+    }
+
+    .home-grid__logo img,
+    .home-grid__logo svg {
+        max-width: 90vw;
+    }
+
+    /* 2 columns on tablet */
+    .home-grid__col:nth-child(n+3) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 2 columns on mobile */
+    .home-grid__col:nth-child(n+3) {
+        display: none;
+    }
+}

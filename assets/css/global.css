@@ -1,0 +1,371 @@
+/**
+ * Global Styles - Nomad Labs
+ *
+ * Base reset, typography, layout, and utility classes.
+ * Swiss-style minimal aesthetic.
+ *
+ * @package NomadLabs
+ */
+
+/* ============================================
+   RESET
+   ============================================ */
+
+   *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    overflow-x: hidden;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Evita drag-ghost + selección de texto al arrastrar tiles con media
+   (patrón canadacanada). En mobile también evita que doble-tap sobre un
+   vídeo/imagen seleccione texto vecino. */
+img, svg, video, iframe, button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+img, video {
+    -webkit-user-drag: none;
+}
+
+/* Utility: cualquier elemento dentro de un container con position:relative
+   se posiciona absoluto y cubre 100% con object-fit: cover. Pensado para
+   stacks poster+video en grid tiles y single-proyecto. */
+.absolute-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+
+:root {
+    /* Colors â€” mapped from Framer Swiss Folio tokens */
+    --color-bg: #ffffff;                        /* --token-f2a2566b */
+    --color-text: #000000;                      /* --token-a5986ae4 */
+    --color-text-muted: #4f4f4f;                /* --token-761777ec */
+    --color-text-light: #999999;
+    --color-border: #dedede;                    /* --token-e6d0450a */
+    --color-overlay: rgba(0, 0, 0, 0.03);      /* --token-d35eab3c ~5% */
+    --color-hover: rgba(0, 0, 0, 0.05);
+    --color-black-10: rgba(0, 0, 0, 0.1);      /* --token-770aad31 */
+    --color-black-30: rgba(0, 0, 0, 0.3);      /* --token-a2ad2759 */
+    --color-white-20: rgba(255, 255, 255, 0.2); /* --token-810efa93 */
+    --color-white-30: rgba(255, 255, 255, 0.3); /* --token-5e4e8ed3 */
+    --color-white-50: rgba(255, 255, 255, 0.5); /* --token-64f211c7 */
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 16px;
+    --space-2xl: 64px;
+    --space-3xl: 96px;
+    --space-4xl: 128px;
+
+    /* Grid */
+    --grid-gap: 16px;
+    --grid-padding: 16px;
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --duration-fast: 0.2s;
+    --duration-normal: 0.4s;
+    --duration-slow: 0.6s;
+
+    /* Z-index */
+    --z-header: 100;
+    --z-menu: 200;
+    --z-overlay: 150;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.site {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-content {
+    flex: 1;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+
+::selection {
+    background: var(--color-text);
+    color: var(--color-bg);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+
+.transition-fade {
+    opacity: 1;
+    transition: opacity 0.15s var(--ease-out);
+}
+
+.is-changing .transition-fade {
+    opacity: 0;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* ============================================
+   LENIS SMOOTH SCROLL
+   ============================================ */
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+/* ============================================
+   404 PAGE
+   ============================================ */
+
+.error-404 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+.error-404__title {
+    font-family: var(--font-serif);
+    font-size: clamp(80px, 15vw, 200px);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-none);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-md);
+}
+
+.error-404__text {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+}
+
+.error-404__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 28px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: 100px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    transition: opacity var(--duration-fast);
+}
+
+.error-404__link:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.site-footer {
+    padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-xl);
+    align-items: end;
+}
+
+.footer-brand {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-md);
+    display: block;
+}
+
+.footer-tagline {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+    max-width: 400px;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-md);
+}
+
+.footer-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast);
+}
+
+.footer-link:hover {
+    color: var(--color-text);
+}
+
+.footer-copyright {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+    font-family: var(--font-mono);
+}
+
+@media (max-width: 809px) {
+    .site-footer {
+        padding: var(--space-2xl) var(--space-md) var(--space-md);
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+    }
+
+    .footer-right {
+        text-align: left;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 809px) {
+    :root {
+        --grid-gap: 8px;
+        --grid-padding: 8px;
+    }
+}

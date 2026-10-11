@@ -1,0 +1,379 @@
+/**
+ * List View - Nomad Labs
+ *
+ * Table-style project listing with Client, Project, Services, Year.
+ * Award badge on awarded projects. Year column sortable.
+ * Grid button at bottom center.
+ *
+ * @package NomadLabs
+ */
+
+/* ============================================
+   LIST CONTAINER
+   ============================================ */
+
+   .list-view {
+    position: relative;
+    padding: 76px var(--space-xl) var(--space-xl);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: -.015em;
+}
+
+/* ============================================
+   FILTERS
+   ============================================ */
+
+.list-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+/* Glassmorphism pill — opens horizontally to the right */
+.list-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 99;
+}
+
+.list-filter__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: #000000;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+    letter-spacing: -.015em;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+
+.list-filter__dropdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 4px;
+    background-color: rgba(245, 245, 245, 0.7);
+    transition: max-width 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                padding 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+    padding: 0;
+    white-space: nowrap;
+}
+
+.list-filter.is-open .list-filter__dropdown {
+    max-width: 800px;
+    pointer-events: all;
+    padding: 4px 8px;
+    transition-delay: 0.1s;
+}
+
+.list-filter__option {
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+    letter-spacing: -.015em;
+    color: #000000;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.4s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.4s cubic-bezier(0.25, 0, 0.25, 1);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.list-filter.is-open .list-filter__option {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.list-filter.is-open .list-filter__option:nth-child(1) { transition-delay: 0.3s; }
+.list-filter.is-open .list-filter__option:nth-child(2) { transition-delay: 0.38s; }
+.list-filter.is-open .list-filter__option:nth-child(3) { transition-delay: 0.44s; }
+.list-filter.is-open .list-filter__option:nth-child(4) { transition-delay: 0.5s; }
+.list-filter.is-open .list-filter__option:nth-child(5) { transition-delay: 0.56s; }
+.list-filter.is-open .list-filter__option:nth-child(6) { transition-delay: 0.62s; }
+.list-filter.is-open .list-filter__option:nth-child(7) { transition-delay: 0.68s; }
+.list-filter.is-open .list-filter__option:nth-child(8) { transition-delay: 0.74s; }
+
+.list-filter__option.is-active {
+    color: #000000 !important;
+    font-weight: var(--font-weight-medium);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .list-filter__option:hover {
+        color: #000000 !important;
+    }
+}
+
+/* ============================================
+   LIST HEADER
+   ============================================ */
+
+.list-header {
+    margin-bottom: 0;
+}
+
+.list-row--header {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr 1fr;
+    gap: 16px;
+    padding: 10px 16px;
+    background-color: rgba(245, 245, 245, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 4px;
+}
+
+.list-row--header .list-col {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    color: #000000;
+    letter-spacing: -.015em;
+    text-transform: none;
+}
+
+/* ============================================
+   YEAR SORT BUTTON
+   ============================================ */
+
+.list-sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+
+.list-sort-icon {
+    transition: transform 0.3s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.list-sort-btn.is-asc .list-sort-icon {
+    transform: rotate(180deg);
+}
+
+/* ============================================
+   LIST ITEMS
+   ============================================ */
+
+.list-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 16px;
+}
+
+.list-row--item {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr 1fr;
+    gap: 16px;
+    padding: 0 16px;
+    text-decoration: none;
+    color: var(--color-text);
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity var(--duration-normal) var(--ease-out),
+                transform var(--duration-normal) var(--ease-out);
+}
+
+.list-row--item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.list-row--item.is-hidden {
+    display: none;
+}
+
+/* Hover: subtle text highlight on current row */
+@media (hover: hover) and (pointer: fine) {
+    .list-row--item.is-visible:hover {
+        opacity: 0.33;
+        transition: opacity var(--duration-fast) var(--ease-out);
+    }
+}
+
+/* ============================================
+   COLUMNS
+   ============================================ */
+
+.list-col {
+    font-size: 22px;
+    font-weight: var(--font-weight-normal);
+    font-family: var(--font-primary);
+    line-height: var(--leading-snug);
+    letter-spacing: -.015em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-col--project {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-col--year {
+    text-align: right;
+}
+
+/* ============================================
+   AWARD BADGE â€” small indicator next to title
+   ============================================ */
+
+.list-award-badge {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+/* ============================================
+   GRID BUTTON â€” bottom center
+   ============================================ */
+
+.list-view__grid-btn {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--z-header, 100);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -.015em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.list-view__grid-btn img {
+    flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .list-view__grid-btn:hover {
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+}
+
+@media (max-width: 809px) {
+    .list-view {
+        padding: 76px var(--space-md) var(--space-lg);
+    }
+
+    .list-filters {
+        flex-wrap: wrap;
+    }
+
+    .list-filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: start;
+        margin-bottom: 8px;
+    }
+
+    .list-filter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list-filter__trigger {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .list-filter__dropdown {
+        flex-direction: column;
+        align-items: flex-start;
+        white-space: normal;
+        gap: 4px;
+        max-width: none;
+        max-height: 0;
+        width: 100%;
+        transition: max-height 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                    padding 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+    }
+
+    .list-filter.is-open .list-filter__dropdown {
+        max-width: none;
+        max-height: 300px;
+        padding: 8px 16px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .list-filter.is-open .list-filter__trigger {
+        border-radius: 4px 4px 0 0;
+    }
+
+    .list-row--header,
+    .list-row--item {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: var(--space-sm);
+    }
+
+    .list-col--services,
+    .list-row--header .list-col--services {
+        display: none;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .list-row--header,
+    .list-row--item {
+        grid-template-columns: 1fr auto;
+    }
+
+    .list-col--project,
+    .list-row--header .list-col--project {
+        display: none;
+    }
+}

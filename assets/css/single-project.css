@@ -1,0 +1,687 @@
+/**
+ * Single Project Styles
+ *
+ * Fullscreen video player with custom controls and info overlay.
+ *
+ * @package NomadLabs
+ */
+
+/* ============================================
+   BODY — No scroll on project page
+   ============================================ */
+   body.single-proyecto {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+}
+
+body.single-proyecto .site,
+body.single-proyecto .site-content {
+    height: 100vh;
+    height: 100dvh;
+}
+
+/* Hide header on project page with animation */
+body.single-proyecto .site-header {
+    z-index: 10001;
+    pointer-events: none;
+}
+
+body.single-proyecto .site-header .nav-header {
+    opacity: 0;
+    transform: translateY(-12px);
+    pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                transform 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+}
+
+/* ============================================
+   PLAYER CONTAINER — Fullscreen
+   ============================================ */
+.project-player {
+    display: none;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #000;
+    z-index: 10000;
+    cursor: default;
+}
+.project-player.is-active {
+    display: block;
+    pointer-events: auto;
+}
+
+/* Fullscreen transition */
+.project-player:fullscreen,
+.project-player:-webkit-full-screen {
+    animation: fs-enter 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+}
+
+@keyframes fs-enter {
+    from {
+        opacity: 0.8;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ============================================
+   BUFFERING — pulse on pause icon
+   ============================================ */
+.project-player.is-buffering .project-btn-play .icon-pause {
+    animation: project-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes project-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ============================================
+   VIDEO
+   ============================================ */
+.project-video-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.project-poster {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    z-index: 1;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.project-poster.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.project-video-wrap {
+    pointer-events: none;
+}
+
+.project-video-wrap video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ============================================
+   CLOSE BUTTON (X) — top right
+   ============================================ */
+.project-btn-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-xs);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+.project-btn-close:hover {
+    opacity: 0.7;
+}
+
+.project-player.controls-hidden .project-btn-close {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   ENTRY ANIMATION — same as About page stagger
+   translateX(-6px) → 0 + opacity 0 → 1
+   ============================================ */
+.project-info,
+.project-btn-close,
+.project-btn,
+.project-time,
+.project-progress {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.5s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+/* Staggered entry delays */
+.project-player.is-loaded .project-info {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.2s;
+}
+
+.project-player.is-loaded .project-btn-close {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.3s;
+}
+
+.project-player.is-loaded .project-btn-play {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.4s;
+}
+
+.project-player.is-loaded .project-btn-mute {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.45s;
+}
+
+.project-player.is-loaded .project-btn-fullscreen {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.5s;
+}
+
+.project-player.is-loaded .project-time {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.55s;
+}
+
+.project-player.is-loaded .project-progress {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.6s;
+}
+
+/* Auto-hide: controls-hidden takes priority */
+.project-player.controls-hidden .project-btn-close,
+.project-player.controls-hidden .project-controls,
+.project-player.controls-hidden .project-info {
+    opacity: 0 !important;
+    pointer-events: none;
+    transition-delay: 0s !important;
+}
+
+/* ============================================
+   CONTROLS BAR — bottom
+   ============================================ */
+.project-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 0 16px 24px;
+    box-sizing: border-box;
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.project-player.controls-hidden .project-controls {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.project-controls-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   BUTTONS — glassmorphism text pills
+   ============================================ */
+.project-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-xs);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Loading state — visible only while buffering before first play */
+.project-btn-play .label-loading { display: none; }
+.project-player.is-buffering:not(.is-playing) .project-btn-play .label-loading {
+    display: inline;
+    animation: loading-pulse 1.2s ease-in-out infinite;
+}
+.project-player.is-buffering:not(.is-playing) .project-btn-play .label-play { display: none; }
+
+/* Mientras estamos en buffering, el botón Play y el Close se saltan la animación
+   de entrada (opacity:0 → 1 con delay 0.4s) para que "Loading" sea visible ya.
+   Si no, el AJAX responde antes de que el botón aparezca y nunca ves el estado. */
+.project-player.is-buffering .project-btn-play,
+.project-player.is-buffering .project-btn-close {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0s;
+}
+
+/* Error state — vídeo no disponible tras fallback */
+.project-player.is-error .project-btn-play .label-loading,
+.project-player.is-error .project-btn-play .label-pause { display: none; }
+.project-player.is-error .project-btn-play .label-play::after {
+    content: ' unavailable';
+    opacity: 0.6;
+}
+
+/* Autoplay bloqueado (iOS low-power mode / políticas de autoplay sin gesto previo).
+   Invitación visual para que el usuario toque y arranque el vídeo manualmente. */
+.project-player.is-autoplay-blocked .project-btn-play .label-loading,
+.project-player.is-autoplay-blocked .project-btn-play .label-pause { display: none; }
+.project-player.is-autoplay-blocked .project-btn-play .label-play::after {
+    content: ' — tap to play';
+    opacity: 0.7;
+    margin-left: 2px;
+}
+.project-player.is-autoplay-blocked .project-btn-play {
+    animation: autoplay-blocked-pulse 1.5s ease-in-out infinite;
+}
+@keyframes autoplay-blocked-pulse {
+    0%, 100% { transform: translateX(0) scale(1); }
+    50%      { transform: translateX(0) scale(1.04); }
+}
+
+@keyframes loading-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Play/Pause toggle */
+.project-btn-play .label-pause { display: none; }
+.project-player.is-playing .project-btn-play .label-play { display: none; }
+.project-player.is-playing .project-btn-play .label-loading { display: none; }
+.project-player.is-playing .project-btn-play .label-pause { display: inline; }
+
+/* Mute toggle */
+.project-btn-mute .label-muted { display: none; }
+.project-player.is-muted .project-btn-mute .label-unmuted { display: none; }
+.project-player.is-muted .project-btn-mute .label-muted { display: inline; }
+
+/* Fullscreen toggle */
+.project-btn-fullscreen .label-exit-fs { display: none; }
+.project-player.is-fullscreen .project-btn-fullscreen .label-enter-fs { display: none; }
+.project-player.is-fullscreen .project-btn-fullscreen .label-exit-fs { display: inline; }
+
+/* ============================================
+   TIME COUNTER
+   ============================================ */
+.project-time {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-xs);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.project-progress {
+    flex: 1;
+    height: 12px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.project-progress::before {
+    display: none;
+}
+
+.project-progress-fill {
+    height: 100%;
+    background: #fff;
+    width: 0%;
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+    border-radius: 2px;
+}
+
+/* Scrubbing state */
+.project-player.is-scrubbing {
+    cursor: grabbing;
+}
+
+.project-player.is-scrubbing .project-progress-fill {
+    transition: none;
+}
+
+/* ============================================
+   INFO — glassmorphism pills
+   ============================================ */
+.project-info {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 15;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: calc(100vw - 80px);
+    transition: opacity 0.3s ease;
+}
+
+.project-player.controls-hidden .project-info {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.project-btn-info {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-size: var(--font-size-xs);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.project-info-overlay {
+    max-width: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 4px;
+    background-color: rgba(245, 245, 245, 0.7);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    padding: 0;
+    transition: max-width 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                max-height 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                padding 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+}
+
+.project-info-overlay.is-visible {
+    max-width: 500px;
+    max-height: 300px;
+    pointer-events: auto;
+    padding: 6px 12px;
+}
+
+.project-info-overlay p {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text, #1A1A1A);
+    line-height: 1.4;
+    margin: 0;
+    word-break: break-word;
+    white-space: normal;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.4s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.4s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.project-info-overlay.is-visible p {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.3s;
+}
+
+/* ============================================
+   PREV / NEXT — tarjetas estilo grid-item
+   Visibles cuando el vídeo NO está reproduciéndose (pausa o estado inicial).
+   Se ocultan con is-playing, is-buffering y controls-hidden (auto-hide).
+   ============================================ */
+.project-nav {
+    position: absolute;
+    bottom: 68px; /* encima de la barra de controles — misma franja que antes */
+    z-index: 12;
+    display: block;
+    width: 340px;
+    aspect-ratio: 16 / 9; /* Fijo para todas las cards, independiente del ratio real del vídeo */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+    color: var(--color-text, #1A1A1A);
+    text-decoration: none;
+    cursor: pointer;
+
+    /* Hidden por defecto */
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.35s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.project-nav--prev { left: 16px; }
+.project-nav--next { right: 16px; }
+
+.project-nav__thumb,
+.project-nav__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.project-nav__video {
+    background: #111;
+}
+
+/* Arrow chip — top-right, glassmorphism (mismo patrón que grid-item__arrow) */
+.project-nav__arrow {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    pointer-events: none;
+}
+
+/* Title chip — bottom-left, glassmorphism */
+.project-nav__label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 3;
+    padding: 6px 12px;
+    border-radius: 4px;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: var(--color-text, #1A1A1A);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 60px);
+    pointer-events: none;
+}
+
+/* Visibles cuando NO está reproduciendo Y no hay buffer Y no están los
+   controles ocultos (auto-hide) Y el player está ya cargado (evita flash inicial).
+   El scroll/swipe dispara safePause() → el vídeo se pausa de verdad → esta misma
+   regla actúa (sin necesidad de clase extra). */
+.project-player.is-loaded:not(.is-playing):not(.is-buffering):not(.controls-hidden) .project-nav {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.project-player.is-loaded:not(.is-playing):not(.is-buffering):not(.controls-hidden) .project-nav--prev {
+    transition-delay: 0.15s;
+}
+.project-player.is-loaded:not(.is-playing):not(.is-buffering):not(.controls-hidden) .project-nav--next {
+    transition-delay: 0.2s;
+}
+
+/* ============================================
+   MOBILE (<768px)
+   ============================================ */
+@media (max-width: 767px) {
+    .project-controls {
+        padding: 0 12px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .project-controls-left {
+        order: 1;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .project-controls-left .project-btn-play,
+    .project-controls-left .project-btn-mute {
+        order: 0;
+    }
+
+    .project-controls-left .project-btn-fullscreen {
+        margin-left: auto;
+    }
+
+    .project-progress {
+        order: 2;
+        width: 100%;
+    }
+
+    .project-time {
+        display: none;
+    }
+
+    .project-info {
+        flex-direction: column;
+        max-width: calc(100vw - 32px);
+    }
+
+    .project-btn-info {
+        font-size: var(--font-size-xs);
+        padding: 6px 12px;
+    }
+
+    .project-btn-close {
+        font-size: var(--font-size-xs);
+        padding: 6px 12px;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .project-info-overlay {
+        max-width: calc(100vw - 32px);
+        width: calc(100vw - 32px);
+        max-height: 0;
+        transition: max-height 0.5s cubic-bezier(0.72, 0.23, 0, 0.83),
+                    padding 0.5s cubic-bezier(0.72, 0.23, 0, 0.83);
+    }
+
+    .project-info-overlay.is-visible {
+        max-width: calc(100vw - 32px);
+        max-height: 300px;
+    }
+
+    .project-info-overlay p {
+        min-width: unset;
+    }
+
+    /* Prev/Next en móvil: 50/50 ocupando el ancho, con 8px de gap entre las dos
+       y 12px de padding lateral. Cada card = (100vw - 32px) / 2 = 50vw - 16px.
+       Aparecen/desaparecen al pausar/reproducir igual que en desktop. */
+    .project-nav {
+        width: calc(50vw - 18px);
+        bottom: 72px;          /* encima de los controles */
+        border-radius: 6px;
+    }
+    .project-nav--prev { left: 12px; }
+    .project-nav--next {right: 12px;}
+
+    .project-nav__arrow {
+        width: 22px;
+        height: 22px;
+        top: 6px;
+        right: 6px;
+    }
+    .project-nav__arrow svg { width: 9px; height: 9px; }
+
+    /* El label se oculta en móvil porque el thumb ya ocupa todo y queda limpio. */
+    .project-nav__label { display: none; }
+}

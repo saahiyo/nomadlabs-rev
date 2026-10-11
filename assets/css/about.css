@@ -1,0 +1,234 @@
+/**
+ * About Page Styles - Nomad Labs
+ *
+ * 12-column grid. Text content in first 4 columns.
+ *
+ * @package NomadLabs
+ */
+
+/* ============================================
+   PAGE
+   ============================================ */
+
+   .about-page {
+    min-height: 100vh;
+    padding: 80px 16px 60px;
+}
+
+/* ============================================
+   12-COLUMN GRID
+   ============================================ */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+}
+
+/* ============================================
+   SECTIONS â€” all in first 4 columns
+   ============================================ */
+
+.about-section {
+    grid-column: 1 / 5;
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.5s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.5s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.about-section.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Staggered delays */
+.about-section:nth-child(1) { transition-delay: 0.2s; }
+.about-section:nth-child(2) { transition-delay: 0.4s; }
+.about-section:nth-child(3) { transition-delay: 0.6s; }
+.about-section:nth-child(4) { transition-delay: 0.8s; }
+
+/* Children animate in after section */
+.about-section .about-text p,
+.about-section .about-tag,
+.about-section .about-link,
+.about-section .about-member {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.4s cubic-bezier(0.25, 0, 0.25, 1),
+                transform 0.4s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.about-section.is-visible .about-text p,
+.about-section.is-visible .about-tag,
+.about-section.is-visible .about-link,
+.about-section.is-visible .about-member {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Stagger children */
+.about-section.is-visible .about-tag:nth-child(1),
+.about-section.is-visible .about-link:nth-child(1),
+.about-section.is-visible .about-member:nth-child(1),
+.about-section.is-visible .about-text p { transition-delay: 0.55s; }
+.about-section.is-visible .about-tag:nth-child(2),
+.about-section.is-visible .about-link:nth-child(2),
+.about-section.is-visible .about-member:nth-child(2) { transition-delay: 0.6s; }
+.about-section.is-visible .about-tag:nth-child(3),
+.about-section.is-visible .about-link:nth-child(3),
+.about-section.is-visible .about-member:nth-child(3) { transition-delay: 0.65s; }
+.about-section.is-visible .about-tag:nth-child(4),
+.about-section.is-visible .about-member:nth-child(4) { transition-delay: 0.7s; }
+.about-section.is-visible .about-tag:nth-child(5) { transition-delay: 0.75s; }
+.about-section.is-visible .about-tag:nth-child(6) { transition-delay: 0.8s; }
+.about-section.is-visible .about-tag:nth-child(7) { transition-delay: 0.85s; }
+.about-section.is-visible .about-tag:nth-child(8) { transition-delay: 0.9s; }
+.about-section.is-visible .about-tag:nth-child(9) { transition-delay: 0.95s; }
+
+/* ============================================
+   LABEL â€” pill style (black bg, white text)
+   ============================================ */
+
+.about-label {
+    margin-bottom: 16px;
+}
+
+.about-label span {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 4px;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: var(--font-size-base, 16px);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -.015em;
+}
+
+/* ============================================
+   ABOUT TEXT
+   ============================================ */
+
+.about-text p {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base, 16px);
+    font-weight: var(--font-weight-normal);
+    line-height: 1;
+    letter-spacing: -.015em;
+    color: var(--color-text, #1A1A1A);
+    margin: 0;
+}
+
+/* ============================================
+   CAPABILITIES â€” pill tags
+   ============================================ */
+
+.about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.about-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    background-color: rgba(245, 245, 245, 0.7);
+    color: #000000;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -.015em;
+}
+
+/* ============================================
+   CONTACT LINKS
+   ============================================ */
+
+.about-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    line-height: normal;
+}
+
+.about-link {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base, 16px);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -.015em;
+    color: var(--color-text, #1A1A1A);
+    text-decoration: none;
+}
+
+@media (hover: hover) {
+    /* Higher specificity than `.about-section.is-visible .about-link` (which sets
+       opacity:1 after the reveal), otherwise the hover fade would be overridden. */
+    .about-section.is-visible .about-link:hover {
+        opacity: 0.5;
+    }
+}
+
+/* ============================================
+   TEAM
+   ============================================ */
+
+.about-team {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    line-height: normal;
+}
+
+.about-member {
+    display: flex;
+    gap: 8px;
+}
+
+.about-member__name {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base, 16px);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: -.015em;
+    color: var(--color-text, #1A1A1A);
+}
+
+.about-member__role {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base, 16px);
+    font-weight: var(--font-weight-normal);
+    letter-spacing: -.015em;
+    color: var(--color-text-muted, #999);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .about-section {
+        grid-column: 1 / 6;
+    }
+}
+
+@media (max-width: 809px) {
+    .about-section {
+        grid-column: 1 / 8;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-section {
+        grid-column: 1 / -1;
+    }
+
+    .about-page {
+        padding: 70px 12px 40px;
+    }
+}

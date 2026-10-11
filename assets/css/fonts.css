@@ -1,0 +1,53 @@
+/**
+ * Fonts - Nomad Labs
+ *
+ * Neue Haas Display Medium as primary font.
+ *
+ * @package NomadLabs
+ */
+
+@font-face {
+    font-family: 'Neue Haas Display';
+    src: url('../fonts/NeueHaasDisplayMediu.R51z8-e-.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Font Stacks */
+    --font-primary: 'Neue Haas Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-serif: 'Times New Roman', Georgia, 'Cambria', serif;
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Monaco, Consolas, monospace;
+
+    /* Font Sizes */
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 16px;
+    --font-size-md: 18px;
+    --font-size-lg: 24px;
+    --font-size-xl: 36px;
+    --font-size-2xl: 48px;
+    --font-size-3xl: 64px;
+    --font-size-display: clamp(32px, 5vw, 80px);
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Letter Spacing */
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.03em;
+    --tracking-wider: 0.05em;
+
+    /* Line Heights */
+    --leading-none: 1;
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+}

@@ -1,0 +1,2342 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Nomad Labs — Kinetic Editorial Grid</title>
+
+    <!-- Favicons -->
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link
+      rel="icon"
+      href="favicon-192x192.png"
+      type="image/png"
+      sizes="192x192"
+    />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+    <link
+      rel="preload"
+      as="font"
+      href="assets/fonts/NeueHaasDisplayMediu.R51z8-e-.woff"
+      type="font/woff"
+      crossorigin
+    />
+
+    <!-- Original CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/fonts.css" />
+    <link rel="stylesheet" href="assets/css/global.css" />
+    <link rel="stylesheet" href="assets/css/header.css" />
+    <link rel="stylesheet" href="assets/css/home-grid.css" />
+    <link rel="stylesheet" href="assets/css/single-project.css" />
+    <link rel="stylesheet" href="assets/css/list-view.css" />
+
+    <style>
+      /* Standalone Smooth Enhancements & Overlay Safety */
+      .project-player {
+        display: none !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        z-index: -1 !important;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .project-player.is-active {
+        display: flex !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 10000 !important;
+      }
+      .grid-item {
+        text-decoration: none;
+        color: inherit;
+      }
+      /* Prevent browser ghost image dragging which locks cursor */
+      img,
+      video,
+      a,
+      .grid-item {
+        -webkit-user-drag: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      /* Custom Fullscreen controls adjustments */
+      .project-controls {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+      .project-btn-close {
+        opacity: 1 !important;
+        cursor: pointer;
+        z-index: 1000;
+      }
+      .project-info-overlay {
+        background: rgba(20, 20, 20, 0.95);
+        color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 420px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    </style>
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js?ver=1.1.18"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js?ver=3.12.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js?ver=3.12.5"></script>
+  </head>
+
+  <body
+    class="home wp-singular page-template page-template-page-home-grid page-template-page-home-grid-php page page-id-2 wp-theme-Nomad_Labs_Master"
+  >
+    <div id="page" class="site">
+      <!-- Header Navigation -->
+      <header class="site-header">
+        <div class="nav-header" id="nav-header">
+          <button class="nav-trigger" id="menu-toggle" aria-label="Menu">
+            <span>Menu</span>
+          </button>
+
+          <nav class="nav-dropdown" id="nav-dropdown">
+            <a href="index.html" class="nav-item menu-link is-current">
+              <span>Home</span>
+            </a>
+            <a href="about.html" class="nav-item menu-link">
+              <span>About</span>
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main id="swup" class="site-content transition-fade">
+        <section class="home-grid" data-home-grid>
+          <h1 class="sr-only">Nomad Labs</h1>
+
+          <!-- Centered Logo — SVG inline para que la tuerca (#nl-asterisk)
+         sea manipulable por JS (rotación siguiendo al cursor). -->
+          <div class="home-grid__logo" aria-label="Nomad Labs">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 891.65 210.35">
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: #1e1c21;
+                  }
+                </style>
+              </defs>
+              <g id="Capa_2" data-name="Capa 2">
+                <g id="Capa_1-2" data-name="Capa 1">
+                  <path
+                    class="cls-1"
+                    d="M595.77,177.61a.85.85,0,0,1-.91-.9V34a.86.86,0,0,1,.91-.91h21.68a.85.85,0,0,1,.9.91V155.93h20.78a.86.86,0,0,1,.9.91v19.87a.85.85,0,0,1-.9.9Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M708.68,176.71c0,.72-.36.9-.9.9H686.1c-.55,0-.91-.18-.91-.9l-1.8-36.13H670.74l-1.81,36.13c0,.72-.36.9-.9.9H646.35c-.54,0-.9-.18-.9-.9L653.4,34c0-.73.36-.91.9-.91h45.53c.54,0,.9.18.9.91ZM672,118.9h10.12l-3.25-64.14h-3.61Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M771.91,86.92c0,9.76-5.6,12.65-8.49,13v3.61c2.71.36,8.49,3.25,8.49,13v32.16c0,18.06-3.61,28.9-18.07,28.9H715a.85.85,0,0,1-.9-.9V34a.85.85,0,0,1,.9-.91h38.84c14.46,0,18.07,10.84,18.07,28.91ZM737.58,90h10.84V54.76H737.58Zm10.84,23.49H737.58v42.45h10.84Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M813.46,54.76H802.62V81c0,2-.18,5.42,3.61,7.23l14.45,7.22c11,5.42,16.26,11.93,16.26,26.56v26.74c0,18.06-3.61,28.9-18.06,28.9H797.2c-14.46,0-18.07-10.84-18.07-28.9V119.62a.85.85,0,0,1,.9-.9h21.68a.85.85,0,0,1,.91.9v36.31h10.84V122.51c0-2,.18-5.42-3.62-7.22l-14.45-7.23c-11-5.42-16.26-11.92-16.26-26.56V62c0-18.07,3.61-28.91,18.07-28.91h21.68c14.45,0,18.06,10.84,18.06,28.91V83.85a.85.85,0,0,1-.9.9H814.36a.85.85,0,0,1-.9-.9Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M56.77,177.61a.85.85,0,0,1-.91-.9V34a.86.86,0,0,1,.91-.91H78.45a1.14,1.14,0,0,1,1.08.91L92,94.51h3.61V34a.85.85,0,0,1,.9-.91H120a.85.85,0,0,1,.9.91V176.71a.85.85,0,0,1-.9.9H99a1.14,1.14,0,0,1-1.08-.9L83,109H79.35v67.75a.85.85,0,0,1-.9.9Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M185.94,62v86.72c0,18.06-3.61,28.9-18.07,28.9H146.19c-14.45,0-18.06-10.84-18.06-28.9V62c0-18.07,3.61-28.91,18.06-28.91h21.68C182.33,33.08,185.94,43.92,185.94,62Zm-23.49-7.23H151.61V155.93h10.84Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M194.06,177.61a.85.85,0,0,1-.9-.9V34a.85.85,0,0,1,.9-.91h32.52c.55,0,.91.18.91.91l5.24,56.91h3.61L241.58,34c0-.73.36-.91.9-.91H275a.85.85,0,0,1,.9.91V176.71a.85.85,0,0,1-.9.9H253.32a.85.85,0,0,1-.9-.9V98.12h-3.61l-7.05,78.59c0,.72-.36.9-.9.9H228.21c-.54,0-.9-.18-.9-.9l-7.05-78.59h-3.61v78.59a.85.85,0,0,1-.91.9Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M344.55,176.71c0,.72-.36.9-.9.9H322c-.54,0-.9-.18-.9-.9l-1.81-36.13H306.61l-1.8,36.13c0,.72-.37.9-.91.9H282.22c-.54,0-.9-.18-.9-.9L289.27,34c0-.73.36-.91.9-.91H335.7c.54,0,.9.18.9.91ZM307.88,118.9H318l-3.25-64.14h-3.61Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M407.78,62v86.72c0,18.06-3.61,28.9-18.07,28.9H350.87a.85.85,0,0,1-.9-.9V34a.85.85,0,0,1,.9-.91h38.84C404.17,33.08,407.78,43.92,407.78,62Zm-23.49-7.23H373.45V155.93h10.84Z"
+                  />
+                  <g id="nl-asterisk">
+                    <path
+                      class="cls-1"
+                      d="M572.7,122.67l-20.13,35.07a3,3,0,0,1-4,1.16L531,145.46a2.06,2.06,0,0,0-2.42,0,47.72,47.72,0,0,1-6.1,3.61,2,2,0,0,0-1.13,2.12l3.07,21.54a2.72,2.72,0,0,1-2.87,2.88H481.26a2.72,2.72,0,0,1-2.87-2.88l3-21.09a2,2,0,0,0-1.17-2.14,49.29,49.29,0,0,1-6.48-3.7,2,2,0,0,0-2.4.05L454.23,158.9a3,3,0,0,1-4-1.16l-20.12-35.07a2.75,2.75,0,0,1,1.16-3.45l20-8.49a2.07,2.07,0,0,0,1.24-2c-.07-1-.1-2.05-.1-3.1,0-1.44.06-2.86.19-4.27a2,2,0,0,0-1.26-2.09L431.24,91a2.75,2.75,0,0,1-1.16-3.45L450.2,52.51a3,3,0,0,1,4-1.15L472,64.93a2,2,0,0,0,2.37.07,48,48,0,0,1,6-3.35,2,2,0,0,0,1.18-2.14l-3.13-21.95a2.72,2.72,0,0,1,2.87-2.88h40.26a2.72,2.72,0,0,1,2.87,2.88L521.19,60a2,2,0,0,0,1.14,2.12A47.63,47.63,0,0,1,528,65.33a2.06,2.06,0,0,0,2.39,0l18.2-13.92a3,3,0,0,1,4,1.15L572.7,87.59A2.77,2.77,0,0,1,571.55,91l-21.06,8.57a2.05,2.05,0,0,0-1.26,2.07c.11,1.29.16,2.59.16,3.9,0,.93,0,1.86-.08,2.77a2,2,0,0,0,1.24,2l21,8.9A2.77,2.77,0,0,1,572.7,122.67Z"
+                    />
+                  </g>
+                  <path
+                    class="cls-1"
+                    d="M27.62,34.22V176.13a6.6,6.6,0,0,0,6.6,6.6h9.45a3.08,3.08,0,0,1,3.08,3.08v21.47a3.07,3.07,0,0,1-3.08,3.07H32.32A32.32,32.32,0,0,1,0,178V32.32A32.32,32.32,0,0,1,32.32,0H43.67a3.08,3.08,0,0,1,3.08,3.08V24.55a3.07,3.07,0,0,1-3.08,3.07H34.22A6.61,6.61,0,0,0,27.62,34.22Z"
+                  />
+                  <path
+                    class="cls-1"
+                    d="M891.65,32.32V178a32.32,32.32,0,0,1-32.32,32.32H848a3.07,3.07,0,0,1-3.07-3.07V185.81a3.08,3.08,0,0,1,3.07-3.08h9.45a6.59,6.59,0,0,0,6.6-6.6V34.22a6.6,6.6,0,0,0-6.6-6.6H848a3.07,3.07,0,0,1-3.07-3.07V3.08A3.08,3.08,0,0,1,848,0h11.35A32.32,32.32,0,0,1,891.65,32.32Z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- List Button -->
+          <a href="list.html" class="home-grid__list-btn">
+            <span>List</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <line
+                x1="2"
+                y1="4"
+                x2="14"
+                y2="4"
+                stroke="currentColor"
+                stroke-linecap="round"
+              />
+              <line
+                x1="2"
+                y1="8"
+                x2="14"
+                y2="8"
+                stroke="currentColor"
+                stroke-linecap="round"
+              />
+              <line
+                x1="2"
+                y1="12"
+                x2="14"
+                y2="12"
+                stroke="currentColor"
+                stroke-linecap="round"
+              />
+            </svg>
+          </a>
+
+          <div class="home-grid__sticky">
+            <div class="home-grid__columns">
+              <div class="home-grid__col" data-grid-col data-direction="down">
+                <div class="home-grid__track" data-grid-track>
+                  <a
+                    href="https://nomadlabs.es/proyecto/bts-nikex-snipes-madrid/"
+                    data-main-vimeo-id="1117636146"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452936"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2057604218-ce379a3c67b1612eb2241a45ff97f1e3864fd4477f6704451f4df29e207e9192-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2057604218-ce379a3c67b1612eb2241a45ff97f1e3864fd4477f6704451f4df29e207e9192-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/alizade_-_stop_smoking_v1-1080p/"
+                    data-main-vimeo-id="1184538219"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620298"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147723316-5c3cb10066a93cfbd65798f2c92e9d9aae3f613fd3c3b730f159ecebae1cc677-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147723316-5c3cb10066a93cfbd65798f2c92e9d9aae3f613fd3c3b730f159ecebae1cc677-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/jay-wheeler-xexo/"
+                    data-main-vimeo-id="1121000212"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452825"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062377899-4f82fdc0994cb7f37d423e53cd05a7845af171f2941aba8da6b8b2cedc54958b-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062377899-4f82fdc0994cb7f37d423e53cd05a7845af171f2941aba8da6b8b2cedc54958b-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/zion-y-lennox-x-chanell-yo-sabia/"
+                    data-main-vimeo-id="1120999903"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452790"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062391155-c859e5c776015c16f45c1ad35bcfac413ce83a6842154469a94e24fff2f58f14-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062391155-c859e5c776015c16f45c1ad35bcfac413ce83a6842154469a94e24fff2f58f14-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/lafc-open-cup-promo/"
+                    data-main-vimeo-id="1117638254"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452735"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2057606751-4c5653ff9393b750baa90e09900354825a2bbb304168951a03e0d955253fce04-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2057606751-4c5653ff9393b750baa90e09900354825a2bbb304168951a03e0d955253fce04-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/flo-x-glorilla-in-my-bag/"
+                    data-main-vimeo-id="1121000610"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452650"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062383029-0eb4c74ec0933cfa70833ca3a91dd10e5fba21096acf5fd3dfe8da46f47f2185-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062383029-0eb4c74ec0933cfa70833ca3a91dd10e5fba21096acf5fd3dfe8da46f47f2185-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Cinematography"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Cinematography</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="home-grid__col" data-grid-col data-direction="up">
+                <div class="home-grid__track" data-grid-track>
+                  <a
+                    href="https://nomadlabs.es/proyecto/karol-g-nicki-minaj-tusa/"
+                    data-main-vimeo-id="1117640360"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452923"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2060476509-6b2d199dc5e53169d6476229ce00cc1e142d715344c17446d5bc6c1ff2546cf6-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2060476509-6b2d199dc5e53169d6476229ce00cc1e142d715344c17446d5bc6c1ff2546cf6-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Creative Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Creative Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/jacuzzi-built-for-it/"
+                    data-main-vimeo-id="1117638183"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452690"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2057606647-ab28cb9d432610c4fcd00575ec9794490c5c76571260879c9e506bba030d1df7-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2057606647-ab28cb9d432610c4fcd00575ec9794490c5c76571260879c9e506bba030d1df7-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/mcdonalds-grand-mcbacon-supreme/"
+                    data-main-vimeo-id="1197068912"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452754"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2163323134-3e0cc3cd10121afd9d424762cf79d1fcc081676f2be3144988b4ce7dc7d2d244-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2163323134-3e0cc3cd10121afd9d424762cf79d1fcc081676f2be3144988b4ce7dc7d2d244-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/mcdonalds-grand-mcbacon/"
+                    data-main-vimeo-id="1197068908"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452744"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2163323121-f7a7c356e62d80d5fc67d60f53a94cc5c6a72e091e1567a3c14167d647866fc1-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2163323121-f7a7c356e62d80d5fc67d60f53a94cc5c6a72e091e1567a3c14167d647866fc1-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/jd_sports_x_chatmo/"
+                    data-main-vimeo-id="1184515205"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620299"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147688022-b63c7168c48b7ea9bc238e6007b70ed04d12b09229db3901a353f93cec488798-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147688022-b63c7168c48b7ea9bc238e6007b70ed04d12b09229db3901a353f93cec488798-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/intersport_back_to_the_club/"
+                    data-main-vimeo-id="1184515170"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620297"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147687932-8233ea70b1913e4e5b7d7722ab50e092b6283e6a087dbb94b0f8ed23b5ca00bf-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147687932-8233ea70b1913e4e5b7d7722ab50e092b6283e6a087dbb94b0f8ed23b5ca00bf-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="home-grid__col" data-grid-col data-direction="down">
+                <div class="home-grid__track" data-grid-track>
+                  <a
+                    href="https://nomadlabs.es/proyecto/our-air-is-different-nike-x-snipes-madrid/"
+                    data-main-vimeo-id="1117636309"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452834"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2057604434-4360d4f73e6b498a21090b2ba963d22edb43d402238929a3655ec7f8816a90d5-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2057604434-4360d4f73e6b498a21090b2ba963d22edb43d402238929a3655ec7f8816a90d5-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/anuel-aa-myke-towers-jhay-cortez-subelo/"
+                    data-main-vimeo-id="1117640084"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452904"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2060479914-6e96fa09c5c64c33a230761787da9e120317c5ffb56cb50645e9b176f2b9b24f-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2060479914-6e96fa09c5c64c33a230761787da9e120317c5ffb56cb50645e9b176f2b9b24f-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Creative Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Creative Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/j-balvin-x-ed-sheeran-sigue/"
+                    data-main-vimeo-id="1121000460"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452679"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2061935360-73d9e63e588b02643fe7c6e2dd8203da6f2b9d37aa6aa1f4db480c59c694d0f7-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2061935360-73d9e63e588b02643fe7c6e2dd8203da6f2b9d37aa6aa1f4db480c59c694d0f7-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Cinematography"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Cinematography</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/de-la-ghetto-x-rauw-alejandro-loco-por-perrearte-remix/"
+                    data-main-vimeo-id="1121000281"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452814"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2061935153-8ed097c0fd543cda8d6db14a45a66efdb41e03d0a849f9727abc61cf4eb9d1b2-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2061935153-8ed097c0fd543cda8d6db14a45a66efdb41e03d0a849f9727abc61cf4eb9d1b2-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/mcdonalds-mcbacon/"
+                    data-main-vimeo-id="1197068902"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452777"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2163323114-df9e3fbcbeb689bf70bfadd18ac626021cccb01d9f94d78a61136f1e8c502088-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2163323114-df9e3fbcbeb689bf70bfadd18ac626021cccb01d9f94d78a61136f1e8c502088-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/j-balvin-amigos/"
+                    data-main-vimeo-id="1121000556"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="1"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452638"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062383858-4f67296dd6e4df0c04f4df4dfc5c5d4cf1e57a3a0088f9d3d3369c669c1c87af-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062383858-4f67296dd6e4df0c04f4df4dfc5c5d4cf1e57a3a0088f9d3d3369c669c1c87af-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Cinematography"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Cinematography</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="home-grid__col" data-grid-col data-direction="up">
+                <div class="home-grid__track" data-grid-track>
+                  <a
+                    href="https://nomadlabs.es/proyecto/rauw-alejandro-museo/"
+                    data-main-vimeo-id="1121000326"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452801"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062378444-30d383941df95e185938638c24a40214538458bd4557622a3349cf7da9e527a4-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062378444-30d383941df95e185938638c24a40214538458bd4557622a3349cf7da9e527a4-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/new_balance_-_in_rotation/"
+                    data-main-vimeo-id="1184515153"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620413"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147687863-c07a5050693adb760c703ccdaff598641388f6147db300caf187ff59ec39ee54-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147687863-c07a5050693adb760c703ccdaff598641388f6147db300caf187ff59ec39ee54-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/kelvyn_colt_-_eye4eye/"
+                    data-main-vimeo-id="1184530229"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620345"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147715563-b9e75fe3ea25c758c210f91c99770847b672d498c0a73c19a09ea4c0c47ff558-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147715563-b9e75fe3ea25c758c210f91c99770847b672d498c0a73c19a09ea4c0c47ff558-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/l-skaffa_-_de_bedoeling_v3/"
+                    data-main-vimeo-id="1184538150"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1192620302"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2147715634-4cd26ffe5dafb9cf339b4d31008e41b5c94ecae284a4670fc1d1b51893ecb186-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2147715634-4cd26ffe5dafb9cf339b4d31008e41b5c94ecae284a4670fc1d1b51893ecb186-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/koe-wetzel-jessie-murph-high-road/"
+                    data-main-vimeo-id="1117636678"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1117636678"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2057604959-114041feb30d8bbe7810994d6e1db9ead3219e810a198a32cf9ac179ec32dd1b-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2057604959-114041feb30d8bbe7810994d6e1db9ead3219e810a198a32cf9ac179ec32dd1b-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Creative Direction"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Creative Direction</span>
+                    </div>
+                  </a>
+                  <a
+                    href="https://nomadlabs.es/proyecto/j-balvin-cosa-de-locos/"
+                    data-main-vimeo-id="1121257348"
+                    class="grid-item grid-item--medium grid-item--video"
+                    data-grid-item
+                    data-col-mobile="2"
+                    data-video-behavior="autoplay"
+                    draggable="false"
+                  >
+                    <div class="grid-item__media">
+                      <video
+                        class="grid-item__video"
+                        data-vimeo-resolve="1184452794"
+                        data-behavior="autoplay"
+                        data-observe
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        preload="none"
+                        poster="https://i.vimeocdn.com/video/2062265058-b9fad4c907b8d194df93b16ce6cb6c7f71ae7fa522e8d35eb68c8eff8a7018d1-d_960x540?&#038;r=pad&#038;region=us"
+                      ></video>
+
+                      <img
+                        class="grid-item__poster"
+                        src="https://i.vimeocdn.com/video/2062265058-b9fad4c907b8d194df93b16ce6cb6c7f71ae7fa522e8d35eb68c8eff8a7018d1-d_960x540?&#038;r=pad&#038;region=us"
+                        alt="Production"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Arrow top-right -->
+                    <span class="grid-item__arrow" aria-hidden="true">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 10L10 2M10 2H3M10 2V9"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+
+                    <!-- Title box bottom-left -->
+                    <div class="grid-item__label">
+                      <span>Production</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Fullscreen Single Project Player (Pixel-Perfect from nomadlabs.es) -->
+      <section class="project-player" id="project-player">
+        <h1 class="sr-only" id="player-sr-title">Nomad Labs Project</h1>
+        <button
+          class="project-btn-close"
+          id="project-btn-close"
+          aria-label="Close"
+        >
+          Close
+        </button>
+
+        <div class="project-video-wrap">
+          <img
+            class="project-poster"
+            id="project-poster"
+            src=""
+            alt="Project Poster"
+          />
+          <video
+            id="project-video"
+            referrerpolicy="no-referrer-when-downgrade"
+            preload="auto"
+            autoplay
+            loop
+            playsinline
+          ></video>
+        </div>
+
+        <div class="project-controls" id="project-controls">
+          <div class="project-controls-left">
+            <button
+              class="project-btn project-btn-play is-playing"
+              id="project-btn-play"
+              aria-label="Play/Pause"
+            >
+              <span class="label-loading" style="display: none">Loading</span>
+              <span class="label-play" style="display: none">Play</span>
+              <span class="label-pause">Pause</span>
+            </button>
+            <button
+              class="project-btn project-btn-mute"
+              id="project-btn-mute"
+              aria-label="Mute/Unmute"
+            >
+              <span class="label-unmuted" style="display: none">Unmute</span>
+              <span class="label-muted">Mute</span>
+            </button>
+            <button
+              class="project-btn project-btn-fullscreen"
+              id="project-btn-fullscreen"
+              aria-label="Fullscreen"
+            >
+              <span class="label-enter-fs">Full screen</span>
+              <span class="label-exit-fs" style="display: none">Exit</span>
+            </button>
+          </div>
+          <div class="project-progress" id="project-progress">
+            <div class="project-progress-fill" id="project-progress-fill"></div>
+          </div>
+          <span class="project-time" id="project-time">00:00 / 00:00</span>
+        </div>
+
+        <div class="project-info">
+          <button class="project-btn-info" id="project-btn-info">Info</button>
+          <div
+            class="project-info-overlay"
+            id="project-info-overlay"
+            style="display: none"
+          >
+            <h3 id="info-title" style="margin-bottom: 12px; font-size: 18px">
+              Project Info
+            </h3>
+            <p id="info-desc">
+              Production & Art Direction by Nomad Labs. Engineered with
+              high-performance WebGL & GPU composited kinetics.
+            </p>
+          </div>
+        </div>
+
+        <button
+          class="project-nav project-nav--prev"
+          id="player-prev"
+          aria-label="Prev project"
+          style="border: none; background: none; cursor: pointer"
+        >
+          <span class="project-nav__arrow">←</span>
+          <span class="project-nav__label">PREV</span>
+        </button>
+
+        <button
+          class="project-nav project-nav--next"
+          id="player-next"
+          aria-label="Next project"
+          style="border: none; background: none; cursor: pointer"
+        >
+          <span class="project-nav__label">NEXT</span>
+          <span class="project-nav__arrow">→</span>
+        </button>
+      </section>
+    </div>
+
+    <!-- Embedded Pre-Resolved High Definition Streaming Data -->
+    <script>
+      window.NOMAD_VIMEO_DATA = {
+        1117636146: {
+          id: "1117636146",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117636146/container/7f1b01ac-1444-48ae-b15e-9435dfbc6ca1/8efcc1ea-e9db2fb8/file.mp4%20%28720p%29.mp4?expires=1791736766&loc=external&oauth2_token_id=1811789717&session_id=02517e5d548497e66dd4dec4689435187e50f9c11791650246&signature=43abe8ce0232d7b59dc499c06f1d398d625e012bc88ccf58b0ec925a6ce67530&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2057604218-ce379a3c67b1612eb2241a45ff97f1e3864fd4477f6704451f4df29e207e9192-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.7,
+        },
+        1117636309: {
+          id: "1117636309",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117636309/container/55358f49-6340-46bd-841b-9a44b43fd3c7/538f189c-7a244b3c/file.mp4%20%28720p%29.mp4?expires=1791761771&loc=external&oauth2_token_id=1811789717&session_id=bd29105ff614362c0b38d20db295da8999ca64bd1791675251&signature=e6c297c96b5167d238f6dd624da0ee27f8a144989f630d7ccea828713a53327b&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2057604434-4360d4f73e6b498a21090b2ba963d22edb43d402238929a3655ec7f8816a90d5-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1117636678: {
+          id: "1117636678",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117636678/container/3db77ed7-e6e2-4153-b57d-6a300640c477/29bdfaf7-1d89e79b/file.mp4%20%281080p%29.mp4?expires=1791795180&loc=external&oauth2_token_id=1811789717&session_id=14136c66e4bd347e52734fd75fa0d66a8bff82051791708660&signature=2b172f803f759fe3cce65f8f0dcd940d593b026582990fb8e8d6c60e31381a85&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2057604959-114041feb30d8bbe7810994d6e1db9ead3219e810a198a32cf9ac179ec32dd1b-d_960x540?&r=pad&region=us",
+          aspect: "1920 / 1080",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1117638183: {
+          id: "1117638183",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117638183/container/f5166613-1b62-4143-979d-7839de3eb332/3b8097ac-28c47776/file.mp4%20%28720p%29.mp4?expires=1791786203&loc=external&oauth2_token_id=1811789717&session_id=2a11e158302032b3187aaa06e7c04b286d91759a1791699683&signature=50f36ebded3d7cc194525037119a863a29e58c011f390f89b5ae970782bcac6c&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2057606647-ab28cb9d432610c4fcd00575ec9794490c5c76571260879c9e506bba030d1df7-d_960x540?&r=pad&region=us",
+          aspect: "800 / 1000",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1117638254: {
+          id: "1117638254",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117638254/container/d057f00f-2d47-4d3a-82d8-47dc16075bfa/9e7486e9-b4cec4fa/file.mp4%20%28720p%29.mp4?expires=1791784842&loc=external&oauth2_token_id=1811789717&session_id=988c3066c00856fbb72a76c38c28b437a2b216ed1791698322&signature=44d5188f2f1500ff83db2644eb7b71ba9b8a04ed2cdb4283a177ad9e6f98268e&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2057606751-4c5653ff9393b750baa90e09900354825a2bbb304168951a03e0d955253fce04-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1117640084: {
+          id: "1117640084",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117640084/container/e5eb2965-3f33-45f1-a245-a81839133017/49281527-0ff7823d/file.mp4%20%281080p%29.mp4?expires=1791761771&loc=external&oauth2_token_id=1811789717&session_id=bd29105ff614362c0b38d20db295da8999ca64bd1791675251&signature=014d14bf291a4027089471b8d92095519af6956b3c2a183d366b8c841c14bc01&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2060479914-6e96fa09c5c64c33a230761787da9e120317c5ffb56cb50645e9b176f2b9b24f-d_960x540?&r=pad&region=us",
+          aspect: "2560 / 1440",
+          cache_status: "HIT",
+          resolve_ms: 5.5,
+        },
+        1117640360: {
+          id: "1117640360",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1117640360/container/88ce1ac5-8adf-456f-aa26-24b5fdd90b8d/6e5cc1e9-84ed68f2/file.mp4%20%281080p%29.mp4?expires=1791805811&loc=external&oauth2_token_id=1811789717&session_id=a41c43996f95e40e6c086ba47434c1f4ba4cd2221791719291&signature=dea38ae8aa784612d3d11f927ad171010cc8b790497f681ed212f7914d958d22&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2060476509-6b2d199dc5e53169d6476229ce00cc1e142d715344c17446d5bc6c1ff2546cf6-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1120999903: {
+          id: "1120999903",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1120999903/container/5ebd6535-541a-4092-87b9-2430ce71e8c9/ea355d0d-1e69512e/file.mp4%20%281080p%29.mp4?expires=1791784840&loc=external&oauth2_token_id=1811789717&session_id=73bd27ec1ed5bfc077f2db0bbfb16779075b52c81791698320&signature=13efe056f1abe6099638dae0fcd9abb63a5e0ebd7b3c5f6df3cbd62c15025abc&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062391155-c859e5c776015c16f45c1ad35bcfac413ce83a6842154469a94e24fff2f58f14-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1121000212: {
+          id: "1121000212",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000212/container/528eac78-4546-48a6-ab33-006fa7cb7027/6b79b2f5-4f2b7535/file.mp4%20%281080p%29.mp4?expires=1791803241&loc=external&oauth2_token_id=1811789717&session_id=3f40dfe131751baeb9c6383cb1575008d911bca51791716721&signature=6602ace08dd3d76ae308def85afd09fa418996f341a7c287e0e8054b379f192f&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062377899-4f82fdc0994cb7f37d423e53cd05a7845af171f2941aba8da6b8b2cedc54958b-d_960x540?&r=pad&region=us",
+          aspect: "3840 / 2160",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1121000281: {
+          id: "1121000281",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000281/container/7ec6cf6f-26ec-4fcb-b5a3-8caacb8d831c/535e4913-315262f9/file.mp4%20%281080p%29.mp4?expires=1791747274&loc=external&oauth2_token_id=1811789717&session_id=d3046a2c34945bdef31b8fa3f515442c8a7d2c0b1791660754&signature=87fc1bb2de3ca2d42d73b5b2e2dec55c2f2ccb7affb6f97171fc5b1c46c70294&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2061935153-8ed097c0fd543cda8d6db14a45a66efdb41e03d0a849f9727abc61cf4eb9d1b2-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1121000326: {
+          id: "1121000326",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000326/container/1330338a-dbd5-45a8-9ff8-ad734bfc2c05/5d62aba0-45245cbb/file.mp4%20%281080p%29.mp4?expires=1791805509&loc=external&oauth2_token_id=1811789717&session_id=2d4b0d393b82789c032b1058e39bdf30500982bd1791718989&signature=bf5ef6814c18ac75f24b1149c46276e04ed7a716230faae89364529481732856&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062378444-30d383941df95e185938638c24a40214538458bd4557622a3349cf7da9e527a4-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1121000460: {
+          id: "1121000460",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000460/container/a11b91a0-bdd7-4249-9b8d-714e87510bad/2dbfd169-5472576a/file.mp4%20%281080p%29.mp4?expires=1791795182&loc=external&oauth2_token_id=1811789717&session_id=9bde3178fa528d97a18060ba61a3c73db0ad91211791708662&signature=c5832335508c77d51653bcedaee8f61c12252727d7de5ee661fda4ff6414572e&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2061935360-73d9e63e588b02643fe7c6e2dd8203da6f2b9d37aa6aa1f4db480c59c694d0f7-d_960x540?&r=pad&region=us",
+          aspect: "3124 / 2160",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1121000556: {
+          id: "1121000556",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000556/container/384230da-791c-4c6a-aae2-013c044b7307/4438bd92-67601bcb/file.mp4%20%281080p%29.mp4?expires=1791761773&loc=external&oauth2_token_id=1811789717&session_id=0b7c6c5f8a7b8c4a399474d56eeff222ba8d66851791675253&signature=87264011d7f32a54b03d35f75aa04751706a104f71f238af88dc84915bb92c8d&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062383858-4f67296dd6e4df0c04f4df4dfc5c5d4cf1e57a3a0088f9d3d3369c669c1c87af-d_960x540?&r=pad&region=us",
+          aspect: "3840 / 1604",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1121000610: {
+          id: "1121000610",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121000610/container/7d72a59a-05c5-4333-bee7-8040b52f86fd/341659dc-1062b812/file.mp4%20%281080p%29.mp4?expires=1791761785&loc=external&oauth2_token_id=1811789717&session_id=4149be46ea7fdcf367036cced8244b891affd9371791675265&signature=66575e2395bc307ee228d73493887d62ac69ecd8085d4ff87ad3403b3840595a&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062383029-0eb4c74ec0933cfa70833ca3a91dd10e5fba21096acf5fd3dfe8da46f47f2185-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1121257348: {
+          id: "1121257348",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1121257348/container/74394812-f1a2-453f-a4d6-cbf91903bf80/6e3fa40c-e98024fc/file.mp4%20%281080p%29.mp4?expires=1791737276&loc=external&oauth2_token_id=1811789717&session_id=e3d8b3a0a0bdfbbe4c403958541ca06e1dd1ae701791650756&signature=cd692f4a307448fe2f39534acd5c5c08766984802049282fafe368b8219f8582&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2062265058-b9fad4c907b8d194df93b16ce6cb6c7f71ae7fa522e8d35eb68c8eff8a7018d1-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452638: {
+          id: "1184452638",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452638/container/a8c4c131-0f0a-4735-9c32-bd6d1b98b163/b6e2c2a4/file.mp4%20%281080p%29.mp4?expires=1791792321&loc=external&oauth2_token_id=1811789717&session_id=f4ee9d7b1ad55ec289553d0deeb28d62395689201791705801&signature=7b72ab22357abcb7b0b2fd8b32b17801fb713ceedc0de572d22697f52ac3d712&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611207-6127a2176a9645309631949871bc06ab5c3596adc3aa9ba5f3ebbdb2d69ece0e-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452650: {
+          id: "1184452650",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452650/container/752428da-44ef-455e-b680-8ca7d7480a0f/9bc336d7/file.mp4%20%281080p%29.mp4?expires=1791801730&loc=external&oauth2_token_id=1811789717&session_id=f7c489b27f7ae0e7ff6174976b1c087231e52b041791715210&signature=dab9f110dae36669c9a0c0c92559e199590c22fea2808b141edb09c0ba2aec39&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611228-14b1b8968cfebeb698a721dde0fc38aa4537e4917b5959abbd461017de2ca215-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452679: {
+          id: "1184452679",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452679/container/70acb944-8891-499d-a2bf-d87276a0ec00/d6b7c710/file.mp4%20%281080p%29.mp4?expires=1791735875&loc=external&oauth2_token_id=1811789717&session_id=98540a8bc80cca2cf54ec20d64b86be5fd263c7a1791649355&signature=a4b3df32425a33bc84df2158bf931f5c3c0a9bc8c7ae908f213b03fb7683c43c&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611247-f582cdcdd9e08d4e4fb8155c7d7add4a841467b24d7a25fdba6570c3b87d4f30-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452690: {
+          id: "1184452690",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452690/container/d35c88d3-fc53-43ad-9656-65eab68c1a27/a354b0ea/file.mp4%20%281080p%29.mp4?expires=1791801729&loc=external&oauth2_token_id=1811789717&session_id=c0931e7585647f8381a55ed1707bc362d40ec1591791715209&signature=8863b47f254e286e74f261b0c797d10b8123ac1a7555189728106a4d5a1327cd&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611262-9b6c6e733c4b20ed60aafe092f2611fecaa7c182d8f3e42c84e179a8f1b6cb46-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452735: {
+          id: "1184452735",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452735/container/83c35289-66f7-434c-b5af-9e1d95498dc2/4477905d/file.mp4%20%281080p%29.mp4?expires=1791801729&loc=external&oauth2_token_id=1811789717&session_id=c0931e7585647f8381a55ed1707bc362d40ec1591791715209&signature=eaad680079e6e01edf87e6ae774038ffef35fa402ee8326cea550b6bc44960c0&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611304-14c67c323b80d970507309de596bdec9b1439c3604b3499dbf92e3b59ddf627b-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452744: {
+          id: "1184452744",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452744/container/250150c9-0d50-4bea-ba4f-c0e5b3e1fdde/189e98ee/file.mp4%20%281080p%29.mp4?expires=1791786203&loc=external&oauth2_token_id=1811789717&session_id=2a11e158302032b3187aaa06e7c04b286d91759a1791699683&signature=2bb2303c758b4b0e54b79b809c29ff68844f090916a262781e2e418205a6f82d&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611306-9ea8f93d047b6649a1b6106902291e59120f0acd0f4cbd437ee5c7a93d08a2e9-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452754: {
+          id: "1184452754",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452754/container/b4dbfa5b-57fe-4370-978e-d8d92db68c7e/b67f6212/file.mp4%20%281080p%29.mp4?expires=1791786203&loc=external&oauth2_token_id=1811789717&session_id=2a11e158302032b3187aaa06e7c04b286d91759a1791699683&signature=2adaa9f6f505754d638c12476c5f9291d77c78feb30d44d4419478ba3bc72bf5&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611355-0bf7512320f25a955ce7ea9950cc424850d86b7a40fd377417217846e015288e-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452777: {
+          id: "1184452777",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452777/container/874f5376-86c6-4b74-9a5a-9ed4f7e07055/f7310599/file.mp4%20%281080p%29.mp4?expires=1791784856&loc=external&oauth2_token_id=1811789717&session_id=b66ace37db349e91e9e50f3e2359fbd285daf13b1791698336&signature=7baba8333e892ca188e9a8953d1aedad853f51dbf43794f7348e8a7c66de9e31&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611372-ff7ef67d269daad6c52155cda8d5e69287548303c928d00283b528f6c9a45a70-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 3,
+        },
+        1184452790: {
+          id: "1184452790",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452790/container/1cc44ba4-aa06-43bb-9508-1c799494a25d/324ccdbe/file.mp4%20%281080p%29.mp4?expires=1791761772&loc=external&oauth2_token_id=1811789717&session_id=ad7697ab1c27ff60f5053ffdfe7b79d9e342023c1791675252&signature=32181503a7deb6f9b3e462ec077249357a05b9a36235aafb3631e9965b513dc1&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611390-55b2938198eba7ec60c2c93f3a7c2af51a8ef1d929941f35633d40af1664a16b-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452794: {
+          id: "1184452794",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452794/container/8e25aa48-c828-47c6-ac62-13937bcdab32/21bf6ca3/file.mp4%20%281080p%29.mp4?expires=1791784847&loc=external&oauth2_token_id=1811789717&session_id=2f60efb57efae76c4536cb9b7ee1bcd386cbd1c11791698327&signature=38aec37d799dfa7555758098d1af8ce67032ad5cd2e6cdb1b4521682f1893a3f&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611405-11f876401f8d683ddd7e95ad603c96af88c4efc48aa15ea62422fdf31e994679-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452801: {
+          id: "1184452801",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452801/container/734ba960-dbfc-4668-adf2-eebcdcf3f92d/12e31b30/file.mp4%20%281080p%29.mp4?expires=1791805487&loc=external&oauth2_token_id=1811789717&session_id=e3f34af2a919c7b25226192e8e320468d8234ea41791718967&signature=aab7ba4a331074c3e3cb152e6eb597b24b8cc4838178fb6ba0d91745d4eda4eb&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611419-0d01387eed1b433118e6600ed1db0a9217ef8801c0c25fcc8fa560896fac860b-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452814: {
+          id: "1184452814",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452814/container/7214584c-9066-4d26-b101-6d56db270834/1b639023/file.mp4%20%281080p%29.mp4?expires=1791747273&loc=external&oauth2_token_id=1811789717&session_id=f34823a6ca8ea39bfe8182457bc1842e1eff3ccc1791660753&signature=d5bf266a07bb25c48c5c393c1c063e3aee7ff917c59b64952c08a8e10d037082&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611423-4eb323a5c2e01eedf03398054aa73f268fc44297a46c87344d034390cfa4f05c-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452825: {
+          id: "1184452825",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452825/container/fef04059-b45c-4436-8619-035a3fb6c663/5ed252b1/file.mp4%20%281080p%29.mp4?expires=1791735875&loc=external&oauth2_token_id=1811789717&session_id=98540a8bc80cca2cf54ec20d64b86be5fd263c7a1791649355&signature=fc3f1168ca014384a06cf5c3589566735cbc308e40173b42073846d15e517623&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611429-49e4e35e595131baddf90214dc4710218d1a1fea5ae196483f90e049a6dda280-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452834: {
+          id: "1184452834",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452834/container/d5670bf8-1c69-4753-9bdb-b49d7e78453a/f5bfeed7/file.mp4%20%281080p%29.mp4?expires=1791784855&loc=external&oauth2_token_id=1811789717&session_id=1b4b6e44832652978f745e3759f513fb4d17a5e11791698335&signature=083cfdaa9cf7bf9f2a8750f8b8f2e2fe2293a9bd42cd9f76bd3a061e321f8cbd&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611506-96b276d86c6974903e0aeb883d06bf251ca07f2b64606433de005105959ccaa2-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452904: {
+          id: "1184452904",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452904/container/c23c826b-d56e-4f92-962e-9d66b2ac065a/2c7e4129/file.mp4%20%281080p%29.mp4?expires=1791729921&loc=external&oauth2_token_id=1811789717&session_id=e4774439cf0129304e0a22650de6c6f4bcca60291791643401&signature=88bcf883808a15a3df00dedab3870b4741db6582eebeaab6b4e4c9bbd803357c&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611562-a7a2ab4a5b63c883d9e2b43ed4c6058199cc2d6da7d0ebfd9485256c9952b928-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184452923: {
+          id: "1184452923",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452923/container/e0bf1a0f-6c22-45b4-ade8-9e97d60ea967/15e5a240/file.mp4%20%281080p%29.mp4?expires=1791786204&loc=external&oauth2_token_id=1811789717&session_id=ee16e68e69af1525f34542907eb62f90277ef6d11791699684&signature=e2525a73444f6a77d465149b010a0a7c25a81743ae5b6c19bca6d0129a034569&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611575-4485d6dc271a922c48935d4897e714f4a15caebb88d740c548a888044c972fe3-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184452936: {
+          id: "1184452936",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184452936/container/c117b484-97f6-4c18-9fa7-e5e2923bdc6e/3b50d631/file.mp4%20%281080p%29.mp4?expires=1791729910&loc=external&oauth2_token_id=1811789717&session_id=21c663dcc61a29f4f7fb6fb2ce6249b8749638031791643390&signature=133f43acaf9adff3de148a72eeb0c75a181fb0b4bcb42b5bf8067efb98cf1ef5&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147611585-948b8178d23217716a19c4f294e52b03c3cbe974ea82f4535e6ea244c46de73e-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184515153: {
+          id: "1184515153",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184515153/container/46dffc28-f590-4fdf-a62f-15b42db8c9ce/5bd8e302-742eb719/file.mp4%20%281080p%29.mp4?expires=1791761787&loc=external&oauth2_token_id=1811789717&session_id=26869b06c9d40f0034e170cc3d8e8bde9822a98f1791675267&signature=fa222516b9bfff9675d319c4a62f173932a3da21241dcb590c029b2642daaf9f&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147687863-c07a5050693adb760c703ccdaff598641388f6147db300caf187ff59ec39ee54-d_960x540?&r=pad&region=us",
+          aspect: "1440 / 1004",
+          cache_status: "HIT",
+          resolve_ms: 4.4,
+        },
+        1184515170: {
+          id: "1184515170",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184515170/container/c7139321-f26c-4ab3-948a-02f5a4213de0/bb7fa266-87b3f826/file.mp4%20%281440p%29.mp4?expires=1791795180&loc=external&oauth2_token_id=1811789717&session_id=14136c66e4bd347e52734fd75fa0d66a8bff82051791708660&signature=520d83348efa4bd29616fef321b31214d794cb556b692473d9861f536d294143&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147687932-8233ea70b1913e4e5b7d7722ab50e092b6283e6a087dbb94b0f8ed23b5ca00bf-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184515205: {
+          id: "1184515205",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184515205/container/1f9d76d7-d1cd-43cd-a7e8-6a31c6777970/6dff0bf7-c20b832f/file.mp4%20%281080p%29.mp4?expires=1791798444&loc=external&oauth2_token_id=1811789717&session_id=bca5b4deddc5124a3c65072db4e243f2d6bce2ca1791711924&signature=1c281a7a1c6808b8eb9f987c355a1c99bdf1e8e75f7d01726fb8d98cfd2dda53&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147688022-b63c7168c48b7ea9bc238e6007b70ed04d12b09229db3901a353f93cec488798-d_960x540?&r=pad&region=us",
+          aspect: "3358 / 2160",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184530229: {
+          id: "1184530229",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184530229/container/5ed6bcc5-3770-4b2f-b77a-734275e7044c/337422f6-8af17d83/file.mp4%20%281080p%29.mp4?expires=1791747274&loc=external&oauth2_token_id=1811789717&session_id=d3046a2c34945bdef31b8fa3f515442c8a7d2c0b1791660754&signature=6a7e9dfe9dc62e451c67a8781957fed74a7bdb808944d4d5d274059b1f0a09bb&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147715563-b9e75fe3ea25c758c210f91c99770847b672d498c0a73c19a09ea4c0c47ff558-d_960x540?&r=pad&region=us",
+          aspect: "2160 / 1440",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1184538150: {
+          id: "1184538150",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184538150/container/33bf6d58-89fe-40aa-b769-3646d25ddd0c/41f4fc24-e5f3c330/file.mp4%20%281080p%29.mp4?expires=1791786213&loc=external&oauth2_token_id=1811789717&session_id=2b36d42ee31722b310ea6600ed9bdcab7e6b193c1791699693&signature=eb731157646de1b95d1cedf891a7525683635040db5e95b7c636fe2a9f28c0ef&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147715634-4cd26ffe5dafb9cf339b4d31008e41b5c94ecae284a4670fc1d1b51893ecb186-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1184538219: {
+          id: "1184538219",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1184538219/container/46ddcea6-58f3-456f-b872-c31dbd02d6be/0b1df9e4-0c81c0dd/file.mp4%20%281080p%29.mp4?expires=1791761786&loc=external&oauth2_token_id=1811789717&session_id=01f95e540b92b5bb0516e177270dcf8bf63def761791675266&signature=efbde941a4c03cfefd4447b57c1bc621eeebb0dce3335106db32cf1b577fd87d&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2147723316-5c3cb10066a93cfbd65798f2c92e9d9aae3f613fd3c3b730f159ecebae1cc677-d_960x540?&r=pad&region=us",
+          aspect: "1440 / 1004",
+          cache_status: "HIT",
+          resolve_ms: 0.4,
+        },
+        1192620297: {
+          id: "1192620297",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620297/container/ef8b4289-e81f-4e43-aad7-aa32bb0a667f/3e101afd/file.mp4%20%281080p%29.mp4?expires=1791729910&loc=external&oauth2_token_id=1811789717&session_id=21c663dcc61a29f4f7fb6fb2ce6249b8749638031791643390&signature=55c1b2dc553e3cf8282c349cd316ca0a74c713120ae841c1ee04e8134943e274&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918744-68669567a22bebcd0764a528df61a11e184ce0d41dbedc69e25cfcf6382c2879-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1192620298: {
+          id: "1192620298",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620298/container/5508e515-d7db-4e68-8b28-b72a3c8f56c9/578f8c23/file.mp4%20%281080p%29.mp4?expires=1791734498&loc=external&oauth2_token_id=1811789717&session_id=3bba85f8946c70332ff5a08a68b3789c00b3e55c1791647978&signature=f54ec3ae71ec89ad2fea2f543182a4ad439cb9ee00ef7223db4bf6ca48d8c377&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918770-4a8b479950b403298bffdbe9ee651397bb0a6db60606c20cc01bf58119484b07-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 5.9,
+        },
+        1192620299: {
+          id: "1192620299",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620299/container/b5f4bda9-a29c-4051-95fb-777a4e0a9e54/35abf6f2/file.mp4%20%281080p%29.mp4?expires=1791801673&loc=external&oauth2_token_id=1811789717&session_id=3d86df063bc1dbad58552419f7e7a774457dc8111791715153&signature=c6aa68665d72ce03b5823a26392f8b8a6da3d48e3197b5248b5e9521b0a741f2&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918824-16f889b3e389e58be90570ae749da78f44831e72ecf35075df497ec11a973651-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.7,
+        },
+        1192620302: {
+          id: "1192620302",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620302/container/169f6dbf-9471-4ecc-b393-2e0867bf0c30/06be1cac/file.mp4%20%281080p%29.mp4?expires=1791801675&loc=external&oauth2_token_id=1811789717&session_id=6360035ef5d248263ea72cd3ee7a794102093b681791715155&signature=755a3dc2da952fbce453d764fda5cef2ca5e034b0c02f841b08b438608526bf3&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918858-278ba7880d07cf04e87defab6a7090b271fc8ccaaf9891f4cb7c695d2ab3923e-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1192620345: {
+          id: "1192620345",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620345/container/d125e571-c6eb-431e-bdb8-9ec5dd4a6383/47f57b53/file.mp4%20%281080p%29.mp4?expires=1791801728&loc=external&oauth2_token_id=1811789717&session_id=e5cf1fe5e6ee46a98d272d9ddfa6baeeb264abca1791715208&signature=98e2aa08266bc2136b0f37e8271a503de24e518dff4d727b71d8316cff25710a&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918826-82be1ff42ea3c0eb304bda9045b6499c73443c450ef39abb4bed26b1398bcbb8-d_960x540?&r=pad&region=us",
+          aspect: "1080 / 1920",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1192620413: {
+          id: "1192620413",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1192620413/container/1ef2eda5-713f-4f50-98fd-0b816a172074/5a55dc45/file.mp4%20%281080p%29.mp4?expires=1791801728&loc=external&oauth2_token_id=1811789717&session_id=e5cf1fe5e6ee46a98d272d9ddfa6baeeb264abca1791715208&signature=ac7212e65fe3ba89c3e172cb25ff52053edd8d29dba55cab2fd15b0287b0c8a4&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2157918835-9a6849b142af0d3155bb4d80e1c3a4655d97e319f4a269fa8cac05eafaa75a45-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1197068902: {
+          id: "1197068902",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1197068902/container/cc32c2b1-d049-4176-9c89-495d2a475806/305ecb77-ac29a8f6/file.mp4%20%281080p%29.mp4?expires=1791761773&loc=external&oauth2_token_id=1811789717&session_id=0b7c6c5f8a7b8c4a399474d56eeff222ba8d66851791675253&signature=f96a5324321bbb5044dbdcc7fb95b84cd1cbb82720e4d928640a469f5204b471&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2163323114-df9e3fbcbeb689bf70bfadd18ac626021cccb01d9f94d78a61136f1e8c502088-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.5,
+        },
+        1197068908: {
+          id: "1197068908",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1197068908/container/8aa29672-35c0-4243-9ed0-7ebcf6eece6b/f71cef8c-80f3145a/file.mp4%20%281080p%29.mp4?expires=1791769891&loc=external&oauth2_token_id=1811789717&session_id=4e699c3448d44f357020c76c8dd4468b7f122d0f1791683371&signature=3dfe461e58cf9843254fe46e50572b000f53436db246a0ad25cd1f7036bd9b6d&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2163323121-f7a7c356e62d80d5fc67d60f53a94cc5c6a72e091e1567a3c14167d647866fc1-d_960x540?&r=pad&region=us",
+          aspect: "1920 / 1080",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+        1197068912: {
+          id: "1197068912",
+          video:
+            "https://player.vimeo.com/progressive_redirect/playback/1197068912/container/3721657d-9e97-4804-afd0-b85e0e7f0c5a/3d94450d-ba73754c/file.mp4%20%281080p%29.mp4?expires=1791734508&loc=external&oauth2_token_id=1811789717&session_id=2527dee5c8ded8ad25daf0775764060bb5261b931791647988&signature=f3df89bd7919e3914437fcf5ecf5cd2fb40aa9ece22c54669a98da924fd30187&user_id=234582515",
+          thumbnail:
+            "https://i.vimeocdn.com/video/2163323134-3e0cc3cd10121afd9d424762cf79d1fcc081676f2be3144988b4ce7dc7d2d244-d_960x540?&r=pad&region=us",
+          aspect: "400 / 300",
+          cache_status: "HIT",
+          resolve_ms: 0.6,
+        },
+      };
+      window.NOMAD_PROJECTS = [
+        {
+          slug: "bts-nikex-snipes-madrid",
+          title: "Production",
+          mainVimeoId: "1117636146",
+          previewVimeoId: "1184452936",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2057604218-ce379a3c67b1612eb2241a45ff97f1e3864fd4477f6704451f4df29e207e9192-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "alizade_-_stop_smoking_v1-1080p",
+          title: "Direction",
+          mainVimeoId: "1184538219",
+          previewVimeoId: "1192620298",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147723316-5c3cb10066a93cfbd65798f2c92e9d9aae3f613fd3c3b730f159ecebae1cc677-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "jay-wheeler-xexo",
+          title: "Production",
+          mainVimeoId: "1121000212",
+          previewVimeoId: "1184452825",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062377899-4f82fdc0994cb7f37d423e53cd05a7845af171f2941aba8da6b8b2cedc54958b-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "zion-y-lennox-x-chanell-yo-sabia",
+          title: "Direction",
+          mainVimeoId: "1120999903",
+          previewVimeoId: "1184452790",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062391155-c859e5c776015c16f45c1ad35bcfac413ce83a6842154469a94e24fff2f58f14-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "lafc-open-cup-promo",
+          title: "Direction",
+          mainVimeoId: "1117638254",
+          previewVimeoId: "1184452735",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2057606751-4c5653ff9393b750baa90e09900354825a2bbb304168951a03e0d955253fce04-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "flo-x-glorilla-in-my-bag",
+          title: "Cinematography",
+          mainVimeoId: "1121000610",
+          previewVimeoId: "1184452650",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062383029-0eb4c74ec0933cfa70833ca3a91dd10e5fba21096acf5fd3dfe8da46f47f2185-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "karol-g-nicki-minaj-tusa",
+          title: "Creative Direction",
+          mainVimeoId: "1117640360",
+          previewVimeoId: "1184452923",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2060476509-6b2d199dc5e53169d6476229ce00cc1e142d715344c17446d5bc6c1ff2546cf6-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "jacuzzi-built-for-it",
+          title: "Direction",
+          mainVimeoId: "1117638183",
+          previewVimeoId: "1184452690",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2057606647-ab28cb9d432610c4fcd00575ec9794490c5c76571260879c9e506bba030d1df7-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "mcdonalds-grand-mcbacon-supreme",
+          title: "Production",
+          mainVimeoId: "1197068912",
+          previewVimeoId: "1184452754",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2163323134-3e0cc3cd10121afd9d424762cf79d1fcc081676f2be3144988b4ce7dc7d2d244-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "mcdonalds-grand-mcbacon",
+          title: "Production",
+          mainVimeoId: "1197068908",
+          previewVimeoId: "1184452744",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2163323121-f7a7c356e62d80d5fc67d60f53a94cc5c6a72e091e1567a3c14167d647866fc1-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "jd_sports_x_chatmo",
+          title: "Direction",
+          mainVimeoId: "1184515205",
+          previewVimeoId: "1192620299",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147688022-b63c7168c48b7ea9bc238e6007b70ed04d12b09229db3901a353f93cec488798-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "intersport_back_to_the_club",
+          title: "Direction",
+          mainVimeoId: "1184515170",
+          previewVimeoId: "1192620297",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147687932-8233ea70b1913e4e5b7d7722ab50e092b6283e6a087dbb94b0f8ed23b5ca00bf-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "our-air-is-different-nike-x-snipes-madrid",
+          title: "Production",
+          mainVimeoId: "1117636309",
+          previewVimeoId: "1184452834",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2057604434-4360d4f73e6b498a21090b2ba963d22edb43d402238929a3655ec7f8816a90d5-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "anuel-aa-myke-towers-jhay-cortez-subelo",
+          title: "Creative Direction",
+          mainVimeoId: "1117640084",
+          previewVimeoId: "1184452904",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2060479914-6e96fa09c5c64c33a230761787da9e120317c5ffb56cb50645e9b176f2b9b24f-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "j-balvin-x-ed-sheeran-sigue",
+          title: "Cinematography",
+          mainVimeoId: "1121000460",
+          previewVimeoId: "1184452679",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2061935360-73d9e63e588b02643fe7c6e2dd8203da6f2b9d37aa6aa1f4db480c59c694d0f7-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "de-la-ghetto-x-rauw-alejandro-loco-por-perrearte-remix",
+          title: "Production",
+          mainVimeoId: "1121000281",
+          previewVimeoId: "1184452814",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2061935153-8ed097c0fd543cda8d6db14a45a66efdb41e03d0a849f9727abc61cf4eb9d1b2-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "mcdonalds-mcbacon",
+          title: "Production",
+          mainVimeoId: "1197068902",
+          previewVimeoId: "1184452777",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2163323114-df9e3fbcbeb689bf70bfadd18ac626021cccb01d9f94d78a61136f1e8c502088-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "j-balvin-amigos",
+          title: "Cinematography",
+          mainVimeoId: "1121000556",
+          previewVimeoId: "1184452638",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062383858-4f67296dd6e4df0c04f4df4dfc5c5d4cf1e57a3a0088f9d3d3369c669c1c87af-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "rauw-alejandro-museo",
+          title: "Production",
+          mainVimeoId: "1121000326",
+          previewVimeoId: "1184452801",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062378444-30d383941df95e185938638c24a40214538458bd4557622a3349cf7da9e527a4-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "new_balance_-_in_rotation",
+          title: "Direction",
+          mainVimeoId: "1184515153",
+          previewVimeoId: "1192620413",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147687863-c07a5050693adb760c703ccdaff598641388f6147db300caf187ff59ec39ee54-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "kelvyn_colt_-_eye4eye",
+          title: "Direction",
+          mainVimeoId: "1184530229",
+          previewVimeoId: "1192620345",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147715563-b9e75fe3ea25c758c210f91c99770847b672d498c0a73c19a09ea4c0c47ff558-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "l-skaffa_-_de_bedoeling_v3",
+          title: "Direction",
+          mainVimeoId: "1184538150",
+          previewVimeoId: "1192620302",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2147715634-4cd26ffe5dafb9cf339b4d31008e41b5c94ecae284a4670fc1d1b51893ecb186-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "koe-wetzel-jessie-murph-high-road",
+          title: "Creative Direction",
+          mainVimeoId: "1117636678",
+          previewVimeoId: "1117636678",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2057604959-114041feb30d8bbe7810994d6e1db9ead3219e810a198a32cf9ac179ec32dd1b-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+        {
+          slug: "j-balvin-cosa-de-locos",
+          title: "Production",
+          mainVimeoId: "1121257348",
+          previewVimeoId: "1184452794",
+          posterUrl:
+            "https://i.vimeocdn.com/video/2062265058-b9fad4c907b8d194df93b16ce6cb6c7f71ae7fa522e8d35eb68c8eff8a7018d1-d_960x540?&#038;r=pad&#038;region=us",
+          classes: "grid-item grid-item--medium grid-item--video",
+        },
+      ];
+    </script>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/home-grid.js"></script>
+    <script src="assets/js/logo-spin.js"></script>
+    <script src="assets/js/frontend.js"></script>
+    <script src="standalone-controller.js"></script>
+  </body>
+</html>
